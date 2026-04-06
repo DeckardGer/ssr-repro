@@ -9,11 +9,17 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as CreatorsNoVirtualRouteImport } from './routes/creators-no-virtual'
 import { Route as CreatorsNoDelayRouteImport } from './routes/creators-no-delay'
 import { Route as CreatorsRouteImport } from './routes/creators'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 
+const CreatorsNoVirtualRoute = CreatorsNoVirtualRouteImport.update({
+  id: '/creators-no-virtual',
+  path: '/creators-no-virtual',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CreatorsNoDelayRoute = CreatorsNoDelayRouteImport.update({
   id: '/creators-no-delay',
   path: '/creators-no-delay',
@@ -40,12 +46,14 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/creators': typeof CreatorsRoute
   '/creators-no-delay': typeof CreatorsNoDelayRoute
+  '/creators-no-virtual': typeof CreatorsNoVirtualRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/creators': typeof CreatorsRoute
   '/creators-no-delay': typeof CreatorsNoDelayRoute
+  '/creators-no-virtual': typeof CreatorsNoVirtualRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -53,13 +61,30 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/creators': typeof CreatorsRoute
   '/creators-no-delay': typeof CreatorsNoDelayRoute
+  '/creators-no-virtual': typeof CreatorsNoVirtualRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/creators' | '/creators-no-delay'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/creators'
+    | '/creators-no-delay'
+    | '/creators-no-virtual'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/creators' | '/creators-no-delay'
-  id: '__root__' | '/' | '/about' | '/creators' | '/creators-no-delay'
+  to:
+    | '/'
+    | '/about'
+    | '/creators'
+    | '/creators-no-delay'
+    | '/creators-no-virtual'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/creators'
+    | '/creators-no-delay'
+    | '/creators-no-virtual'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -67,10 +92,18 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   CreatorsRoute: typeof CreatorsRoute
   CreatorsNoDelayRoute: typeof CreatorsNoDelayRoute
+  CreatorsNoVirtualRoute: typeof CreatorsNoVirtualRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/creators-no-virtual': {
+      id: '/creators-no-virtual'
+      path: '/creators-no-virtual'
+      fullPath: '/creators-no-virtual'
+      preLoaderRoute: typeof CreatorsNoVirtualRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/creators-no-delay': {
       id: '/creators-no-delay'
       path: '/creators-no-delay'
@@ -107,6 +140,7 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   CreatorsRoute: CreatorsRoute,
   CreatorsNoDelayRoute: CreatorsNoDelayRoute,
+  CreatorsNoVirtualRoute: CreatorsNoVirtualRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
