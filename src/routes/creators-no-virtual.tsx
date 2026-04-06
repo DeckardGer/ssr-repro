@@ -11,7 +11,8 @@ interface Creator {
 	bookmarkCount: number;
 }
 
-function generateCreators(count: number): Creator[] {
+async function generateCreators(count: number): Promise<Creator[]> {
+	await new Promise((r) => setTimeout(r, 100));
 	return Array.from({ length: count }, (_, i) => ({
 		id: `creator-${i}`,
 		username: `user_${i}`,
@@ -23,10 +24,7 @@ function generateCreators(count: number): Creator[] {
 const creatorsQueryOptions = () =>
 	queryOptions({
 		queryKey: ["creators-no-virtual"],
-		queryFn: async () => {
-			await new Promise((r) => setTimeout(r, 100));
-			return generateCreators(1000);
-		},
+		queryFn: () => generateCreators(1000),
 	});
 
 // ─── Route ────────────────────────────────────────────────────────────────
